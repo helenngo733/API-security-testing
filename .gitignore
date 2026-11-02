@@ -1,0 +1,4 @@
+.env
+venv/
+requests.log
+security_summary.json
