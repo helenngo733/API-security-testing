@@ -1,0 +1,29 @@
+services:
+  api:
+    build: .
+    user: appuser
+    command: ["gunicorn", "-b", "0.0.0.0:5000", "app:app"]
+    env_file: .env
+    working_dir: /app
+    volumes:
+      - api_logs:/logs
+    networks:
+      - test_network
+
+  proxy:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - api
+    networks:
+      - test_network
+
+networks:
+  test_network:
+    name: test_network
+
+volumes:
+  api_logs:
